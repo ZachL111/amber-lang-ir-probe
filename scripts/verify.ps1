@@ -59,3 +59,7 @@ foreach ($pathPattern in $knownPaths) {
 }
 
 julia --project=. tests/runtests.jl
+
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check-amber-lang-ir-detail.ps1
+
+julia --project=. tests/domain_review.jl

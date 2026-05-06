@@ -1,68 +1,40 @@
 # amber-lang-ir-probe
 
-`amber-lang-ir-probe` is a Julia project for Compilers. It turns create a Julia reference implementation for ir workflows, centered on constraint solving, bounded scenario files, and conflict explanations into a small local model with readable fixtures and a direct verification command.
-
-## Reading Amber Lang IR Probe
-
-Start with the README, then open `metadata/project.json` to check the constants behind the examples. After that, `fixtures/cases.csv` shows the compact path and `examples/extended_cases.csv` gives a wider look at the same rule.
+`amber-lang-ir-probe` is a compact Julia repository for compilers, centered on this goal: Create a Julia reference implementation for ir workflows, centered on constraint solving, bounded scenario files, and conflict explanations.
 
 ## Purpose
 
-The goal is to capture the core behavior in code and make the surrounding assumptions obvious. A reader should be able to run the verifier, open the fixtures, and understand why each decision was made.
+This is intentionally local and self-contained so it can be inspected without credentials, services, or seeded history.
 
-## What It Does
+## Amber Lang IR Probe Review Notes
 
-- Models source form with deterministic scoring and explicit review decisions.
-- Uses fixture data to keep intermediate state changes visible in code review.
-- Includes extended examples for bytecode output, including `recovery` and `degraded`.
-- Documents evaluation checks tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
+The first comparison I would make is `IR pressure` against `diagnostic reach` because it shows where the rule is most opinionated.
 
-## Design Sketch
+## What Is Covered
 
-The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps source form, intermediate state, and bytecode output in one explicit decision path. The threshold is 152, with risk penalty 7, latency penalty 3, and weight bonus 3. The Julia project keeps the model in a small module with assertions in a local test script.
+- `fixtures/domain_review.csv` adds cases for IR pressure and lowering drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/amber-lang-ir-walkthrough.md` walks through the case spread.
+- The Julia code includes a review path for `IR pressure` and `diagnostic reach`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Files Worth Reading
+## Implementation Notes
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The repository has two validation layers: the original compact policy fixture and the domain review fixture. They are separate so one can change without hiding failures in the other.
 
-## Setup
+The Julia addition stays small enough to inspect in one sitting.
 
-Install Julia and run the commands from the repository root. The project does not need credentials or a hosted service.
-
-## Usage
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Verification
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Fixture Notes
-
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+The same command runs the local verification path. The highest-scoring domain case is `stale` at 214, which lands in `ship`. The most cautious case is `recovery` at 136, which lands in `watch`.
 
 ## Limits
 
-The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
-
-## Next Directions
-
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add one more compilers fixture that focuses on a malformed or borderline input.
+This remains a local project with deterministic fixtures. It does not depend on credentials, hosted services, or live data. Future work should add richer malformed inputs before widening the public API.

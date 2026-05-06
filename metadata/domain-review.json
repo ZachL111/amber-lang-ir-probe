@@ -1,0 +1,73 @@
+{
+  "repo": "amber-lang-ir-probe",
+  "language": "Julia",
+  "category": "Compilers",
+  "goal": "Create a Julia reference implementation for ir workflows, centered on constraint solving, bounded scenario files, and conflict explanations.",
+  "review_model": {
+    "terms": [
+      "IR pressure",
+      "lowering drift",
+      "stack depth",
+      "diagnostic reach"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "IR pressure",
+      "signal": 41,
+      "slack": 50,
+      "drag": 26,
+      "confidence": 89,
+      "score": 143,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "lowering drift",
+      "signal": 58,
+      "slack": 37,
+      "drag": 21,
+      "confidence": 93,
+      "score": 183,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "stack depth",
+      "signal": 78,
+      "slack": 29,
+      "drag": 32,
+      "confidence": 94,
+      "score": 183,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "diagnostic reach",
+      "signal": 58,
+      "slack": 20,
+      "drag": 23,
+      "confidence": 69,
+      "score": 136,
+      "lane": "watch"
+    },
+    {
+      "name": "stale",
+      "focus": "IR pressure",
+      "signal": 73,
+      "slack": 46,
+      "drag": 18,
+      "confidence": 76,
+      "score": 214,
+      "lane": "ship"
+    }
+  ]
+}
